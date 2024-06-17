@@ -48,5 +48,33 @@ customElements.define('my-desktop-dock',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
     }
+
+    /**
+     * Called after the element is inserted into the DOM.
+     */
+    connectedCallback () {
+      this.addEventListener('icon-click', this.handleIconClick)
+    }
+
+    /**
+     * Called when disconnected from the DOM.
+     */
+    disconnectedCallback () {
+      this.removeEventListener('icon-click', this.handleIconClick)
+    }
+
+    /**
+     * Handles the click event on the icon button.
+     *
+     * @param {Event} event The click event triggered by the icon button.
+     */
+    handleIconClick (event) {
+      const appType = event.detail.appType
+      this.dispatchEvent(new CustomEvent('open-app', {
+        detail: { appType },
+        bubbles: true,
+        composed: true
+      }))
+    }
   }
 )
