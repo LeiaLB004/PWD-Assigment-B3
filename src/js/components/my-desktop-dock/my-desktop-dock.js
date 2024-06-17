@@ -21,6 +21,7 @@ template.innerHTML = `
   }
 </style>
 <div id="dock">
+  <my-icon-button app-type="messages" src="./js/components/my-desktop-dock/images/chat-icon.png"></my-icon-button>
   <p>Dock content</p>
 </div>
 `
