@@ -1,31 +1,23 @@
 /**
- * The desktop dock web component module.
+ * The icon button web component module.
  *
  * @author Leia Lindberg <ll224np@student.lnu.se>
  * @version 1.0.0
  */
 
-import '../my-icon-button/index.js'
-
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
-  #dock {
-    display: block;
-    position: fixed;
-    background-color: #6e5483;
-    width: 100%;
-    border-bottom: 2px solid white;
-    color: white;
-    border-radius: 0px 0px 10px 10px;
+  #icon-button {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
   }
 </style>
-<div id="dock">
-  <p>Dock content</p>
-</div>
+<img id="icon-button"/>
 `
 
-customElements.define('my-desktop-dock',
+customElements.define('my-icon-button',
   /**
    * Represents a desktop element.
    */
