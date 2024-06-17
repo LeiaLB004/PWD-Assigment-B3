@@ -19,10 +19,16 @@ template.innerHTML = `
     color: white;
     border-radius: 0px 0px 10px 10px;
   }
+
+  my-icon-button {
+    padding-right: 20px;
+    float: right;
+  }
 </style>
 <div id="dock">
+  <my-icon-button app-type="memory" src="./js/components/my-desktop-dock/images/memory-icon.png"></my-icon-button>
+  <my-icon-button app-type="weather" src="./js/components/my-desktop-dock/images/weather-icon.png"></my-icon-button>
   <my-icon-button app-type="messages" src="./js/components/my-desktop-dock/images/chat-icon.png"></my-icon-button>
-  <p>Dock content</p>
 </div>
 `
 
