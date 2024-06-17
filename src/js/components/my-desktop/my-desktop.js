@@ -19,6 +19,10 @@ template.innerHTML = `
     overflow: hidden;
   }
 
+  my-memory-game {
+    display: none;
+  }
+
 </style>
 <div id="desktop-body">
 <my-desktop-dock></my-desktop-dock>
@@ -31,6 +35,8 @@ customElements.define('my-desktop',
    * Represents a desktop element.
    */
   class extends HTMLElement {
+    #dock
+    #memoryGame
     /**
      * Creates an instance of the current type.
      */
@@ -39,6 +45,31 @@ customElements.define('my-desktop',
 
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
+
+      this.#dock = this.shadowRoot.querySelector('my-desktop-dock')
+      this.#memoryGame = this.shadowRoot.querySelector('my-memory-game')
+    }
+
+    connectedCallback () {
+      this.#dock.addEventListener('open-app', this.openApp.bind(this))
+    }
+
+    openApp (event) {
+      console.log(event)
+      const appType = event.detail.appType
+      switch (appType) {
+        case 'memory':
+          this.openMemoryApp()
+          console.log('Hej!')
+          break
+        default:
+          console.error('Unknown app type.')
+      }
+    }
+
+
+    openMemoryApp () {
+      this.#memoryGame.style.display = 'block'
     }
   }
 )
