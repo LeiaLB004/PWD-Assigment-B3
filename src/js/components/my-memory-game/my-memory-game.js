@@ -41,7 +41,7 @@ template.innerHTML = `
     }
     my-flipping-tile::part(tile-back) {
       border-width: 5px;
-      background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #ffd700);;
+      background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #6e5483);;
     }
   </style>
   <template id="tile-template">
