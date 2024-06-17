@@ -7,7 +7,19 @@
 
 const template = document.createElement('template')
 template.innerHTML = `
-<p>Hejsan!</p>
+<style>
+  #desktop-body {
+    background-image: url("./js/components/my-desktop/images/background.jpg");
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+</style>
+<div id="desktop-body">
+  <p>Hejsan!</p>
+</div>
 `
 
 customElements.define('my-desktop',
