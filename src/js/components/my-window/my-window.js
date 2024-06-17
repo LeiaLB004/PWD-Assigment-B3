@@ -58,6 +58,9 @@ customElements.define('my-window',
    * Represents a desktop element.
    */
   class extends HTMLElement {
+    #dragging = false
+    #startX
+    #startY
     #title
     #header
     #closeButton
@@ -82,6 +85,41 @@ customElements.define('my-window',
     connectedCallback () {
       this.#title.innerText = this.getAttribute('title')
       this.#closeButton.addEventListener('click', this.closeWindow.bind(this))
+      this.#header.addEventListener('mousedown', this.startDrag.bind(this))
+      this.shadowRoot.addEventListener('mousemove', this.drag.bind(this))
+      this.shadowRoot.addEventListener('mouseup', this.stopDrag.bind(this))
+    }
+
+    /**
+     * Starts dragging the window when the mouse is pressed on the header.
+     *
+     * @param {MouseEvent} event - The mousedown event object.
+     */
+    startDrag (event) {
+      this.#dragging = true
+      this.#startX = event.clientX - this.offsetLeft
+      this.#startY = event.clientY - this.offsetTop
+    }
+
+    /**
+     * Drags the window while the mouse is moved, if dragging is active.
+     *
+     * @param {MouseEvent} event - The mousemove event object.
+     */
+    drag (event) {
+      if (this.#dragging) {
+        const x = event.clientX - this.#startX
+        const y = event.clientY - this.#startY
+        this.style.left = `${x}px`
+        this.style.top = `${y}px`
+      }
+    }
+
+    /**
+     * Stops dragging the window when the mouse button is released.
+     */
+    stopDrag () {
+      this.#dragging = false
     }
 
     /**
