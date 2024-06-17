@@ -6,6 +6,7 @@
  */
 
 import '../my-desktop-dock/index.js'
+import '../my-memory-game/index.js'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -20,7 +21,8 @@ template.innerHTML = `
 
 </style>
 <div id="desktop-body">
-<my-desktop-dock />
+<my-desktop-dock></my-desktop-dock>
+<my-memory-game></my-memory-game>
 </div>
 `
 
