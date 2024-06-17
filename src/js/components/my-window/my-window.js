@@ -86,8 +86,20 @@ customElements.define('my-window',
       this.#title.innerText = this.getAttribute('title')
       this.#closeButton.addEventListener('click', this.closeWindow.bind(this))
       this.#header.addEventListener('mousedown', this.startDrag.bind(this))
+      this.addEventListener('mousedown', this.bringToFront.bind(this))
       this.shadowRoot.addEventListener('mousemove', this.drag.bind(this))
       this.shadowRoot.addEventListener('mouseup', this.stopDrag.bind(this))
+    }
+
+    /**
+     * Called after the element is inserted into the DOM.
+     */
+    disconnectedCallback () {
+      this.#closeButton.removeEventListener('click', this.closeWindow.bind(this))
+      this.#header.removeEventListener('mousedown', this.startDrag.bind(this))
+      this.removeEventListener('mousedown', this.bringToFront.bind(this))
+      this.shadowRoot.removeEventListener('mousemove', this.drag.bind(this))
+      this.shadowRoot.removeEventListener('mouseup', this.stopDrag.bind(this))
     }
 
     /**
@@ -120,6 +132,13 @@ customElements.define('my-window',
      */
     stopDrag () {
       this.#dragging = false
+    }
+
+    /**
+     * Bringing the window to the front.
+     */
+    bringToFront () {
+      this.style.zIndex = this.style.zIndex + 1
     }
 
     /**
