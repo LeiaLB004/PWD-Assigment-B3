@@ -50,6 +50,7 @@ customElements.define('my-icon-button',
     connectedCallback () {
       this.#iconButton.src = this.getAttribute('src')
       this.#iconButton.alt = this.getAttribute('alt')
+      this.#iconButton.appType = this.getAttribute('app-type')
       this.#iconButton.addEventListener('click', () => this.handleClick())
     }
 
@@ -58,8 +59,11 @@ customElements.define('my-icon-button',
      */
     handleClick () {
       const appType = this.getAttribute('app-type')
+      console.log('Icon clicked, appType: ', appType)
       this.dispatchEvent(new CustomEvent('icon-click', {
-        detail: { appType }
+        detail: { appType },
+        bubbles: true,
+        composed: true
       }))
     }
   }
