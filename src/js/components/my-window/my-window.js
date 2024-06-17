@@ -58,7 +58,10 @@ customElements.define('my-window',
    * Represents a desktop element.
    */
   class extends HTMLElement {
+    #title
+    #header
     #closeButton
+
     /**
      * Creates an instance of the current type.
      */
@@ -68,6 +71,8 @@ customElements.define('my-window',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
 
+      this.#title = this.shadowRoot.querySelector('.window-title')
+      this.#header = this.shadowRoot.querySelector('.window-header')
       this.#closeButton = this.shadowRoot.querySelector('.close-button')
     }
 
@@ -75,6 +80,7 @@ customElements.define('my-window',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
+      this.#title.innerText = this.getAttribute('title')
       this.#closeButton.addEventListener('click', this.closeWindow.bind(this))
     }
 
