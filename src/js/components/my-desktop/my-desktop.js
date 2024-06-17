@@ -7,6 +7,7 @@
 
 import '../my-desktop-dock/index.js'
 import '../my-memory-game/index.js'
+import '../my-window/index.js'
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -19,14 +20,9 @@ template.innerHTML = `
     overflow: hidden;
   }
 
-  my-memory-game {
-    display: none;
-  }
-
 </style>
 <div id="desktop-body">
 <my-desktop-dock></my-desktop-dock>
-<my-memory-game></my-memory-game>
 </div>
 `
 
@@ -36,7 +32,6 @@ customElements.define('my-desktop',
    */
   class extends HTMLElement {
     #dock
-    #memoryGame
     /**
      * Creates an instance of the current type.
      */
@@ -47,7 +42,6 @@ customElements.define('my-desktop',
       this.shadowRoot.appendChild(template.content.cloneNode(true))
 
       this.#dock = this.shadowRoot.querySelector('my-desktop-dock')
-      this.#memoryGame = this.shadowRoot.querySelector('my-memory-game')
     }
 
     /**
@@ -79,7 +73,11 @@ customElements.define('my-desktop',
      * Opens the memory game application by displaying it on the desktop.
      */
     openMemoryApp () {
-      this.#memoryGame.style.display = 'block'
+      const windowElement = document.createElement('my-window')
+      windowElement.setAttribute('title', 'Memory Game')
+      const memoryGame = document.createElement('my-memory-game')
+      windowElement.appendChild(memoryGame)
+      this.shadowRoot.querySelector('#desktop-body').appendChild(windowElement)
     }
   }
 )
