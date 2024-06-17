@@ -50,10 +50,18 @@ customElements.define('my-desktop',
       this.#memoryGame = this.shadowRoot.querySelector('my-memory-game')
     }
 
+    /**
+     * Called after the element is inserted into the DOM.
+     */
     connectedCallback () {
       this.#dock.addEventListener('open-app', this.openApp.bind(this))
     }
 
+    /**
+     * Handles the 'open-app' event to determine which application type to open.
+     *
+     * @param {CustomEvent} event - The custom event containing the appType in the detail.
+     */
     openApp (event) {
       console.log(event)
       const appType = event.detail.appType
@@ -67,7 +75,9 @@ customElements.define('my-desktop',
       }
     }
 
-
+    /**
+     * Opens the memory game application by displaying it on the desktop.
+     */
     openMemoryApp () {
       this.#memoryGame.style.display = 'block'
     }
