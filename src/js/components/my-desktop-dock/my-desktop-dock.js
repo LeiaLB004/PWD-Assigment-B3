@@ -15,14 +15,16 @@ template.innerHTML = `
     position: fixed;
     background-color: #6e5483;
     width: 100%;
+    height: 80px;
     border-bottom: 2px solid white;
     color: white;
     border-radius: 0px 0px 10px 10px;
   }
 
   my-icon-button {
-    padding-right: 20px;
+    padding-right: 30px;
     float: right;
+    padding-top: 10px;
   }
 </style>
 <div id="dock">

@@ -8,13 +8,22 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+    .icon-container {
+    padding: 5px;
+  }
+  .icon-container:hover {
+    background-color: white;
+    border-radius: 10px;
+  }
   #icon-button {
     width: 40px;
     height: 40px;
     cursor: pointer;
   }
 </style>
-<img id="icon-button"/>
+<div class="icon-container">
+  <img id="icon-button"/>
+</div>
 `
 
 customElements.define('my-icon-button',
