@@ -70,6 +70,8 @@ customElements.define('my-chat-app',
     #usernameInput
     #messageInput
     #sendButton
+    #messages = []
+    #maxMessages = 20
     /**
      * Creates an instance of the current type.
      */
@@ -171,7 +173,13 @@ customElements.define('my-chat-app',
       const messageElement = document.createElement('div')
       messageElement.classList.add('message')
       messageElement.textContent = `${message.username}: ${message.data}`
+
+      const messageElements = this.#messagesContainer.querySelectorAll('.message')
+      if (messageElements.length > this.#maxMessages) {
+        this.#messagesContainer.removeChild(messageElements[0]) // Remove the oldest message
+      }
       this.#messagesContainer.appendChild(messageElement)
+
       this.#messagesContainer.scrollTop = this.#messagesContainer.scrollHeight
     }
 
