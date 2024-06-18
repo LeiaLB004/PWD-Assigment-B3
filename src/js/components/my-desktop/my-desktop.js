@@ -7,6 +7,7 @@
 
 import '../my-desktop-dock/index.js'
 import '../my-memory-game/index.js'
+import '../my-chat-app/index.js'
 import '../my-window/index.js'
 
 const template = document.createElement('template')
@@ -64,6 +65,9 @@ customElements.define('my-desktop',
           this.openMemoryApp()
           console.log('Hej!')
           break
+        case 'messages':
+          this.openMessageApp()
+          break
         default:
           console.error('Unknown app type.')
       }
@@ -77,6 +81,17 @@ customElements.define('my-desktop',
       windowElement.setAttribute('title', 'Memory Game')
       const memoryGame = document.createElement('my-memory-game')
       windowElement.appendChild(memoryGame)
+      this.shadowRoot.querySelector('#desktop-body').appendChild(windowElement)
+    }
+
+    /**
+     * Opens the chat application by displaying it on the desktop.
+     */
+    openMessageApp () {
+      const windowElement = document.createElement('my-window')
+      windowElement.setAttribute('title', 'Message App')
+      const messageApp = document.createElement('my-chat-app')
+      windowElement.appendChild(messageApp)
       this.shadowRoot.querySelector('#desktop-body').appendChild(windowElement)
     }
   }
