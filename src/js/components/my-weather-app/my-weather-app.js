@@ -109,7 +109,7 @@ customElements.define('my-weather-app',
     /**
      * Displays weather information in the component.
      *
-     * @param {Object} data - Weather data object received from the API.
+     * @param {object} data - Weather data object received from the API.
      */
     displayWeather (data) {
       const { name, main, weather } = data

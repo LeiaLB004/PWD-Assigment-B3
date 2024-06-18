@@ -14,7 +14,7 @@ template.innerHTML = `
     top: 100px;
     left: 300px;
     width: 405px;
-    height: 450px;
+    height: 600px;
     border: 1px solid black;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     background-color: white;
