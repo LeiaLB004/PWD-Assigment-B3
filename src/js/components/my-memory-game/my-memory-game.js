@@ -43,6 +43,10 @@ template.innerHTML = `
       border-width: 5px;
       background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #6e5483);;
     }
+
+    #retry-button {
+      display: none;
+    }
   </style>
   <template id="tile-template">
     <my-flipping-tile>
@@ -59,6 +63,8 @@ template.innerHTML = `
   </div>
   <div id="game-board">
   </div>
+  <div id="attempt-counter">Attempts: 0</div>
+  <button id="retry-button">Retry</button>
 `
 
 /*
@@ -69,6 +75,9 @@ customElements.define('my-memory-game',
    * Represents a memory game
    */
   class extends HTMLElement {
+    #retryButton
+    #attemptCounter
+    #attempts = 0
     /**
      * The game board element.
      *
@@ -101,10 +110,28 @@ customElements.define('my-memory-game',
 
       // Get the tile template element in the shadow root.
       this.#tileTemplate = this.shadowRoot.querySelector('#tile-template')
+      this.#attemptCounter = this.shadowRoot.querySelector('#attempt-counter')
+      this.#retryButton = this.shadowRoot.querySelector('#retry-button')
 
       this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
       this.#boardSizeSelect.addEventListener('change', (event) => {
         this.boardSize = event.target.value
+      })
+
+      this.#retryButton.addEventListener('click', () => {
+        this.#retryButton.style.display = 'none'
+        // Reset attempts counter and update UI
+        this.#attempts = 0
+        this.#updateAttemptCounter()
+
+        this.#tiles.all.forEach((tile, i) => {
+          tile.removeAttribute('face-up')
+          tile.removeAttribute('hidden')
+          tile.removeAttribute('disabled')
+        })
+        setTimeout(() => {
+          this.#init()
+        }, 500)
       })
     }
 
@@ -279,6 +306,8 @@ customElements.define('my-memory-game',
       const [first, second, ...tilesToEnable] = tilesToDisable
 
       if (second) {
+        this.#attempts++ // Increment attempts counter
+        this.#updateAttemptCounter()
         const isEqual = first.isEqual(second)
         const delay = isEqual ? 1000 : 1500
         window.setTimeout(() => {
@@ -303,13 +332,21 @@ customElements.define('my-memory-game',
             this.dispatchEvent(new CustomEvent('memory-game:game-over', {
               bubbles: true
             }))
-
+            this.#retryButton.style.display = 'block'
+            this.#attemptCounter.textContent = `Game Over! Total Attempts: ${this.#attempts}`
             this.#init()
           } else {
             tilesToEnable?.forEach(tile => (tile.removeAttribute('disabled')))
           }
         }, delay)
       }
+    }
+
+    /**
+     * Updates the attempt counter in the UI.
+     */
+    #updateAttemptCounter () {
+      this.#attemptCounter.textContent = `Attempts: ${this.#attempts}`
     }
   }
 )
