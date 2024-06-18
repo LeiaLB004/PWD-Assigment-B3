@@ -242,7 +242,7 @@ customElements.define('my-chat-app',
     }
 
     /**
-     * Toggle the emoji picker
+     * Toggle the emoji picker.
      */
     toggleEmojiPicker () {
       this.#emojiPicker.style.display = (this.#emojiPicker.style.display === 'block') ? 'none' : 'block'
