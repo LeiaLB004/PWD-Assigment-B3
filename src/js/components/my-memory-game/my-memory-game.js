@@ -49,6 +49,14 @@ template.innerHTML = `
       <img />
     </my-flipping-tile>
   </template>
+    <div id="controls">
+    <label for="board-size-select">Select board size:</label>
+    <select id="board-size-select">
+      <option value="large">4x4</option>
+      <option value="medium">4x2</option>
+      <option value="small">2x2</option>
+    </select>
+  </div>
   <div id="game-board">
   </div>
 `
@@ -75,6 +83,8 @@ customElements.define('my-memory-game',
      */
     #tileTemplate
 
+    #boardSizeSelect
+
     /**
      * Creates an instance of the current type.
      */
@@ -91,6 +101,11 @@ customElements.define('my-memory-game',
 
       // Get the tile template element in the shadow root.
       this.#tileTemplate = this.shadowRoot.querySelector('#tile-template')
+
+      this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
+      this.#boardSizeSelect.addEventListener('change', (event) => {
+        this.boardSize = event.target.value
+      })
     }
 
     /**
