@@ -8,7 +8,47 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+    .weather-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
 
+  input[type="text"] {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  .weather-info {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+  }
 </style>
 <div id="weather-container">
   <input type="text" id="city-input" placeholder="Enter city">
@@ -75,9 +115,12 @@ customElements.define('my-weather-app',
       const { name, main, weather } = data
       const temperature = main.temp
       const description = weather[0].description
+      const icon = weather[0].icon
+      const iconurl = `http://openweathermap.org/img/w/${icon}.png`
 
       this.#weatherInfo.innerHTML = `
       <h3>Weather in ${name}</h3>
+        <img src=${iconurl} alt="Weather icon"/>
         <p><strong>Temperature:</strong> ${temperature} °C</p>
         <p><strong>Description:</strong> ${description}</p>
       `
