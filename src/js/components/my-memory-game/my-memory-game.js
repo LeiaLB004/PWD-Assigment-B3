@@ -121,6 +121,8 @@ customElements.define('my-memory-game',
       this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
       this.#boardSizeSelect.addEventListener('change', (event) => {
         this.boardSize = event.target.value
+        this.#gameTimer.resetTime()
+        this.#firstClick = true
       })
 
       this.#retryButton.addEventListener('click', () => {
@@ -135,7 +137,7 @@ customElements.define('my-memory-game',
           tile.removeAttribute('hidden')
           tile.removeAttribute('disabled')
         })
-        this.#gameTimer.stopTimer()
+        this.#gameTimer.resetTime()
         setTimeout(() => {
           this.#init()
         }, 500)

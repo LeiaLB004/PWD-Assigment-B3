@@ -43,6 +43,14 @@ customElements.define('my-game-timer',
     }
 
     /**
+     * Reset the timer.
+     */
+    resetTime () {
+      clearInterval(this.#gameTimerInterval)
+      this.shadowRoot.querySelector('#game-time').textContent = '00:00'
+    }
+
+    /**
      * Stop the game timer.
      */
     stopTimer () {
