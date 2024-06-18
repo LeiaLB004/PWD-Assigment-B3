@@ -16,7 +16,7 @@ template.innerHTML = `
     background-color: #6e5483;
     width: 100%;
     height: 80px;
-    border-bottom: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     color: white;
     border-radius: 0px 0px 10px 10px;
   }
@@ -29,8 +29,8 @@ template.innerHTML = `
 </style>
 <div id="dock">
   <my-icon-button app-type="memory" src="./js/components/my-desktop-dock/images/memory-icon.png"></my-icon-button>
-  <my-icon-button app-type="weather" src="./js/components/my-desktop-dock/images/weather-icon.png"></my-icon-button>
-  <my-icon-button app-type="messages" src="./js/components/my-desktop-dock/images/chat-icon.png"></my-icon-button>
+  <my-icon-button app-type="weather" src="./js/components/my-desktop-dock/images/weather.png"></my-icon-button>
+  <my-icon-button app-type="messages" src="./js/components/my-desktop-dock/images/chat.png"></my-icon-button>
 </div>
 `
 

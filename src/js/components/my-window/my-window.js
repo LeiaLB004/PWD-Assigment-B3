@@ -10,12 +10,13 @@ template.innerHTML = `
 <style>
 :host {
     display: block;
-    position: absolute;
-    top: 100px;
-    left: 300px;
-    width: 405px;
-    height: 600px;
-    border: 1px solid black;
+    position: fixed;
+    top: 50%; /* Centrera vertikalt */
+    left: 50%; /* Centrera horisontellt */
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 650px;
+    border-radius: 10px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     background-color: white;
     z-index: 1;
@@ -31,17 +32,29 @@ template.innerHTML = `
   }
 
   .close-button {
+    font-weight: bold;
+    border-radius: 3px;
     background: none;
     border: none;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
+  }
+
+  .close-button:hover {
+    background-color: white;
+    color: #6e5483;
   }
 
   .window-content {
     padding: 10px;
     height: calc(100% - 40px); /* Adjust based on header height */
     overflow: auto;
+    margin: 0 auto;
+  }
+  emoji-picker {
+    --num-columns: 6;
+    --category-emoji-size: 1.125rem;
   }
 </style>
 <div class="window-header">

@@ -8,6 +8,15 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+  #game-time {
+    margin: 10px;
+    font-size: 20px;
+    font-family: Arial, sans-serif; /* Example font family */
+    color: #333; /* Example text color */
+    background-color: #f0f0f0; /* Example background color */
+    padding: 10px; /* Example padding */
+    border-radius: 5px; /* Example border radius */
+  }
 </style>
 <div id="game-time">00:00</div>
 `

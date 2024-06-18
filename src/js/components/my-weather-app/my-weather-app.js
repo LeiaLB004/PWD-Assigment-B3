@@ -9,14 +9,18 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style>
     .weather-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+    width: 80%;
+    max-width: 400px;
+    margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   input[type="text"] {
@@ -26,28 +30,63 @@ template.innerHTML = `
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    box-sizing: border-box;
   }
 
   button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #6e5483;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 0 auto;
+    text-align: center;
   }
 
   button:hover {
-    background-color: #0056b3;
+    background-color: #9a82af;
   }
 
   .weather-info {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    display: none;
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 20px;
     background-color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .weather-info h3 {
+    color: #6e5483;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .weather-info p {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .weather-info strong {
+    font-weight: bold;
+    color: #555;
+  }
+  .weather-info img {
+    width: 100px;
+    margin-top: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 </style>
 <div id="weather-container">
@@ -95,6 +134,7 @@ customElements.define('my-weather-app',
           if (!res.ok) {
             throw new Error('Weather data not found')
           }
+          this.#weatherInfo.style.display = 'block'
           const data = await res.json()
           this.displayWeather(data)
         } catch (error) {
@@ -121,8 +161,8 @@ customElements.define('my-weather-app',
       this.#weatherInfo.innerHTML = `
       <h3>Weather in ${name}</h3>
         <img src=${iconurl} alt="Weather icon"/>
-        <p><strong>Temperature:</strong> ${temperature} °C</p>
-        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Temperature</strong> <br/>${temperature} °C</p>
+        <p><strong>Description</strong> <br/>${description}</p>
       `
     }
   }

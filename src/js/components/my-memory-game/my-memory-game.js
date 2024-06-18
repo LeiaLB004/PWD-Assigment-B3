@@ -2,6 +2,7 @@
  * The my-memory-game web component module.
  *
  * @author Mats Loock <mats.loock@lnu.se>
+ * @author Leia Lindberg <ll224np@student.lnu.se>
  * @version 1.1.0
  */
 
@@ -27,13 +28,26 @@ template.innerHTML = `
   <style>
     :host {
       --tile-size: 80px;
+      --button-bg-color: #6e5483;
+      --button-hover-bg-color: #563d62;
+      --button-active-bg-color: #452d4a;
+      --button-text-color: #ffffff;
+      --button-border-radius: 5px;
+      --button-padding: 10px 20px;
+      --text-color: #333;
+      --font-family: Arial, sans-serif;
+      --counter-font-size: 1.2em;
     }
     #game-board {
       display: grid;
       grid-template-columns: repeat(4, var(--tile-size));
       gap: 20px;
+      margin-bottom: 20px;
+      justify-content:center;
     }
     #game-board.small {
+      display: flex;
+      justify-content: center;
       grid-template-columns: repeat(2, var(--tile-size));
     }
     my-flipping-tile {
@@ -41,34 +55,80 @@ template.innerHTML = `
       height: var(--tile-size);
     }
     my-flipping-tile:focus {
-      outline: 2px solid blue;
+      outline: 2px solid #6e5483;
     }
     my-flipping-tile::part(tile-back) {
       border-width: 5px;
       background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #6e5483);
     }
+    #board-size-select {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    #board-size-select button {
+      background-color: var(--button-bg-color);
+      color: var(--button-text-color);
+      border: none;
+      border-radius: var(--button-border-radius);
+      padding: var(--button-padding);
+      cursor: pointer;
+      font-family: var(--font-family);
+    }
+    #board-size-select button:hover {
+      background-color: var(--button-hover-bg-color);
+    }
+    #board-size-select button:active {
+      background-color: var(--button-active-bg-color);
+    }
+
+    #attempt-counter {
+      color: var(--text-color);
+      font-family: var(--font-family);
+      font-size: var(--counter-font-size);
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
     #retry-button {
       display: none;
+      background-color: var(--button-bg-color);
+      color: var(--button-text-color);
+      border: none;
+      border-radius: var(--button-border-radius);
+      padding: var(--button-padding);
+      cursor: pointer;
+      font-family: var(--font-family);
+      margin-top: 20px;
+      margin: 0 auto;
+    }
+    #retry-button:hover {
+      background-color: var(--button-hover-bg-color);
+    }
+    #retry-button:active {
+      background-color: var(--button-active-bg-color);
+    }
+
+    my-game-timer {
+      text-align: center;
+      padding-bottom: 30px;
     }
   </style>
+  <my-game-timer></my-game-timer>
   <template id="tile-template">
     <my-flipping-tile>
       <img />
     </my-flipping-tile>
   </template>
-    <div id="controls">
-    <label for="board-size-select">Select board size:</label>
-    <select id="board-size-select">
-      <option value="large">4x4</option>
-      <option value="medium">4x2</option>
-      <option value="small">2x2</option>
-    </select>
-  </div>
   <div id="game-board">
   </div>
+  <div id="board-size-select">
+      <button value="large">4x4</button>
+      <button value="medium">4x2</button>
+      <button value="small">2x2</button>
+  </div>
   <div id="attempt-counter">Attempts: 0</div>
-  <my-game-timer></my-game-timer>
   <button id="retry-button">Retry</button>
 `
 
@@ -122,14 +182,17 @@ customElements.define('my-memory-game',
       this.#gameTimer = this.shadowRoot.querySelector('my-game-timer')
 
       this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
-      this.#boardSizeSelect.addEventListener('change', (event) => {
+      this.#boardSizeSelect.addEventListener('click', (event) => {
         this.boardSize = event.target.value
         this.#gameTimer.resetTime()
+        this.#attempts = 0
+        this.#updateAttemptCounter()
         this.#firstClick = true
       })
 
       this.#retryButton.addEventListener('click', () => {
         this.#firstClick = true
+        this.#boardSizeSelect.style.display = 'flex'
         this.#retryButton.style.display = 'none'
         // Reset attempts counter and update UI
         this.#attempts = 0
@@ -373,6 +436,7 @@ customElements.define('my-memory-game',
             this.dispatchEvent(new CustomEvent('memory-game:game-over', {
               bubbles: true
             }))
+            this.#boardSizeSelect.style.display = 'none'
             this.#retryButton.style.display = 'block'
             this.#attemptCounter.textContent = `Game Over! Total Attempts: ${this.#attempts}`
             this.#gameTimer.stopTimer()
@@ -391,7 +455,7 @@ customElements.define('my-memory-game',
      */
     moveFocus (key) {
       const tiles = this.#tiles.all
-      const focusedIndex = tiles.findIndex(tile => tile === this.shadowRoot.querySelector(':focus'))
+      const focusedIndex = tiles.findIndex(tile => tile === this.shadowRoot.activeElement)
 
       if (focusedIndex !== -1) {
         let nextIndex
@@ -414,7 +478,6 @@ customElements.define('my-memory-game',
 
         // Double check if index are inside the board.
         if (nextIndex >= 0 && nextIndex < tiles.length) {
-          tiles[nextIndex].setAttribute('tabindex', '0')
           tiles[nextIndex].focus() // Move foucus to the next tile.
         }
       }
