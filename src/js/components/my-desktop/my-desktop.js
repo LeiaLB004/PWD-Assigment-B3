@@ -8,6 +8,7 @@
 import '../my-desktop-dock/index.js'
 import '../my-memory-game/index.js'
 import '../my-chat-app/index.js'
+import '../my-weather-app/index.js'
 import '../my-window/index.js'
 
 const template = document.createElement('template')
@@ -68,6 +69,9 @@ customElements.define('my-desktop',
         case 'messages':
           this.openMessageApp()
           break
+        case 'weather':
+          this.openWeatherApp()
+          break
         default:
           console.error('Unknown app type.')
       }
@@ -92,6 +96,17 @@ customElements.define('my-desktop',
       windowElement.setAttribute('title', 'Message App')
       const messageApp = document.createElement('my-chat-app')
       windowElement.appendChild(messageApp)
+      this.shadowRoot.querySelector('#desktop-body').appendChild(windowElement)
+    }
+
+    /**
+     * Opens the memory game application by displaying it on the desktop.
+     */
+    openWeatherApp () {
+      const windowElement = document.createElement('my-window')
+      windowElement.setAttribute('title', 'Weather App')
+      const weatherApp = document.createElement('my-weather-app')
+      windowElement.appendChild(weatherApp)
       this.shadowRoot.querySelector('#desktop-body').appendChild(windowElement)
     }
   }
