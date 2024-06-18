@@ -83,7 +83,35 @@ customElements.define('my-chat-app',
       this.#messageInput = this.shadowRoot.querySelector('#message-input')
       this.#sendButton = this.shadowRoot.querySelector('#send-button')
 
+      this.#sendButton.addEventListener('click', () => this.sendMessage())
+      this.#messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault()
+          this.sendMessage()
+        }
+      })
+
       this.connectWebSocket()
+      this.loadUsername()
+    }
+
+    /**
+     * Loud the username.
+     */
+    loadUsername () {
+      const savedUsername = localStorage.getItem('username')
+      if (savedUsername) {
+        this.#usernameInput.value = savedUsername
+        this.#usernameInput.setAttribute('readonly', true)
+      } else {
+        this.#usernameInput.addEventListener('blur', () => {
+          const username = this.#usernameInput.value.trim()
+          if (username) {
+            localStorage.setItem('username', username)
+            this.#usernameInput.setAttribute('readonly', true)
+          }
+        })
+      }
     }
 
     /**
@@ -116,6 +144,25 @@ customElements.define('my-chat-app',
     }
 
     /**
+     * Sending a message.
+     */
+    sendMessage () {
+      const username = localStorage.getItem('username')
+      const messageText = this.#messageInput.value.trim()
+      if (messageText && username) {
+        const message = {
+          type: 'message',
+          data: messageText,
+          username: username,
+          channel: 'my, not so secret, channel',
+          key: import.meta.env.VITE_API
+        }
+        this.websocket.send(JSON.stringify(message))
+        this.#messageInput.value = ''
+      }
+    }
+
+    /**
      * Displays a message in the chat interface.
      *
      * @param {object} message - The message object containing username and message data.
@@ -126,6 +173,16 @@ customElements.define('my-chat-app',
       messageElement.textContent = `${message.username}: ${message.data}`
       this.#messagesContainer.appendChild(messageElement)
       this.#messagesContainer.scrollTop = this.#messagesContainer.scrollHeight
+    }
+
+    /**
+     * Disconnect from DOM.
+     */
+    disconnectedCallback () {
+      if (this.websocket) {
+        this.websocket.close()
+      }
+      console.log('MyChatComponent disconnected from the DOM')
     }
   }
 )
