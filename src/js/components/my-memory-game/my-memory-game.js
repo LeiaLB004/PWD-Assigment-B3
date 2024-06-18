@@ -40,9 +40,12 @@ template.innerHTML = `
       width: var(--tile-size);
       height: var(--tile-size);
     }
+    my-flipping-tile:focus {
+      outline: 2px solid blue;
+    }
     my-flipping-tile::part(tile-back) {
       border-width: 5px;
-      background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #6e5483);;
+      background: url("${IMG_URLS[0]}") no-repeat center/80%, radial-gradient(#fff, #6e5483);
     }
 
     #retry-button {
@@ -222,6 +225,12 @@ customElements.define('my-memory-game',
 
       this.#upgradeProperty('boardsize')
 
+      const firstTile = this.#tiles.all[0]
+      if (firstTile) {
+        firstTile.setAttribute('tabindex', '0')
+        firstTile.focus()
+      }
+
       this.#gameBoard.addEventListener('my-flipping-tile:flip', () => {
         if (this.#firstClick) {
           this.#gameTimer.startTimer()
@@ -234,6 +243,18 @@ customElements.define('my-memory-game',
         event.preventDefault()
         event.stopPropagation()
       })
+
+      this.addEventListener('keydown', (event) => {
+        console.log('You pressed down', event.key)
+        if (event.key.startsWith('Arrow')) {
+          event.preventDefault()
+          this.moveFocus(event.key)
+        } else if (event.key === 'Enter') {
+          event.preventDefault()
+          this.flipFocusedTile()
+        }
+      })
+      this.#init()
     }
 
     /**
@@ -303,6 +324,10 @@ customElements.define('my-memory-game',
         tile.querySelector('img').setAttribute('src', IMG_URLS[indexes[i] % (tilesCount / 2) + 1])
         tile.faceUp = tile.disabled = tile.hidden = false
       })
+
+      this.#tiles.all.forEach(tile => {
+        tile.setAttribute('tabindex', '0')
+      })
     }
 
     /**
@@ -355,6 +380,54 @@ customElements.define('my-memory-game',
             tilesToEnable?.forEach(tile => (tile.removeAttribute('disabled')))
           }
         }, delay)
+      }
+    }
+
+    /**
+     * Move the focus to the next tile.
+     *
+     * @param {string} key - The key names.
+     */
+    moveFocus (key) {
+      const tiles = this.#tiles.all
+      const focusedIndex = tiles.findIndex(tile => tile === this.shadowRoot.querySelector(':focus'))
+
+      if (focusedIndex !== -1) {
+        let nextIndex
+        switch (key) {
+          case 'ArrowUp':
+            nextIndex = focusedIndex - this.#gameBoardSize.width
+            break
+          case 'ArrowDown':
+            nextIndex = focusedIndex + this.#gameBoardSize.width
+            break
+          case 'ArrowLeft':
+            nextIndex = focusedIndex - 1
+            break
+          case 'ArrowRight':
+            nextIndex = focusedIndex + 1
+            break
+          default:
+            return
+        }
+
+        // Double check if index are inside the board.
+        if (nextIndex >= 0 && nextIndex < tiles.length) {
+          tiles[nextIndex].setAttribute('tabindex', '0')
+          tiles[nextIndex].focus() // Move foucus to the next tile.
+        }
+      }
+    }
+
+    /**
+     * Vänd den fokuserade brickan.
+     */
+    flipFocusedTile () {
+      const focusedTile = this.shadowRoot.querySelector(':focus')
+      console.log(focusedTile, focusedTile.tagName)
+
+      if (focusedTile && focusedTile.tagName === 'MY-FLIPPING-TILE') {
+        focusedTile.click() // Simulera en klick händelse på den fokuserade brickan
       }
     }
 
