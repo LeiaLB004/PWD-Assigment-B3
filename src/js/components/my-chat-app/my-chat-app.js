@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+import 'emoji-picker-element'
+
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
@@ -56,6 +58,7 @@ button:hover {
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Enter your username">
   <textarea id="message-input" placeholder="Type your message..."></textarea>
+  <emoji-picker></emoji-picker>
   <button id="send-button">Send</button>
 </div>
 `
@@ -70,8 +73,8 @@ customElements.define('my-chat-app',
     #usernameInput
     #messageInput
     #sendButton
-    #messages = []
     #maxMessages = 20
+    #emojiPicker
     /**
      * Creates an instance of the current type.
      */
@@ -84,6 +87,7 @@ customElements.define('my-chat-app',
       this.#usernameInput = this.shadowRoot.querySelector('#username')
       this.#messageInput = this.shadowRoot.querySelector('#message-input')
       this.#sendButton = this.shadowRoot.querySelector('#send-button')
+      this.#emojiPicker = this.shadowRoot.querySelector('emoji-picker')
 
       this.#sendButton.addEventListener('click', () => this.sendMessage())
       this.#messageInput.addEventListener('keydown', (event) => {
@@ -91,6 +95,12 @@ customElements.define('my-chat-app',
           event.preventDefault()
           this.sendMessage()
         }
+      })
+
+      this.#emojiPicker.addEventListener('emoji-click', (event) => {
+        const emoji = event.detail.emoji.unicode
+        console.log(emoji)
+        this.#messageInput.value += emoji
       })
 
       this.connectWebSocket()
@@ -175,7 +185,7 @@ customElements.define('my-chat-app',
       messageElement.textContent = `${message.username}: ${message.data}`
 
       const messageElements = this.#messagesContainer.querySelectorAll('.message')
-      if (messageElements.length > this.#maxMessages) {
+      if (messageElements.length >= this.#maxMessages) {
         this.#messagesContainer.removeChild(messageElements[0]) // Remove the oldest message
       }
       this.#messagesContainer.appendChild(messageElement)
