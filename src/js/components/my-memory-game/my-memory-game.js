@@ -6,6 +6,7 @@
  */
 
 import '../my-flipping-tile/index.js'
+import '../my-game-timer/index.js'
 
 /*
  * Get image URLs.
@@ -64,6 +65,7 @@ template.innerHTML = `
   <div id="game-board">
   </div>
   <div id="attempt-counter">Attempts: 0</div>
+  <my-game-timer></my-game-timer>
   <button id="retry-button">Retry</button>
 `
 
@@ -78,6 +80,8 @@ customElements.define('my-memory-game',
     #retryButton
     #attemptCounter
     #attempts = 0
+    #gameTimer
+    #firstClick = true
     /**
      * The game board element.
      *
@@ -112,6 +116,7 @@ customElements.define('my-memory-game',
       this.#tileTemplate = this.shadowRoot.querySelector('#tile-template')
       this.#attemptCounter = this.shadowRoot.querySelector('#attempt-counter')
       this.#retryButton = this.shadowRoot.querySelector('#retry-button')
+      this.#gameTimer = this.shadowRoot.querySelector('my-game-timer')
 
       this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
       this.#boardSizeSelect.addEventListener('change', (event) => {
@@ -119,6 +124,7 @@ customElements.define('my-memory-game',
       })
 
       this.#retryButton.addEventListener('click', () => {
+        this.#firstClick = true
         this.#retryButton.style.display = 'none'
         // Reset attempts counter and update UI
         this.#attempts = 0
@@ -129,6 +135,7 @@ customElements.define('my-memory-game',
           tile.removeAttribute('hidden')
           tile.removeAttribute('disabled')
         })
+        this.#gameTimer.stopTimer()
         setTimeout(() => {
           this.#init()
         }, 500)
@@ -213,7 +220,13 @@ customElements.define('my-memory-game',
 
       this.#upgradeProperty('boardsize')
 
-      this.#gameBoard.addEventListener('my-flipping-tile:flip', () => this.#onTileFlip())
+      this.#gameBoard.addEventListener('my-flipping-tile:flip', () => {
+        if (this.#firstClick) {
+          this.#gameTimer.startTimer()
+          this.#firstClick = false
+        }
+        this.#onTileFlip()
+      })
       this.addEventListener('dragstart', (event) => {
         // Disable element dragging.
         event.preventDefault()
@@ -334,6 +347,7 @@ customElements.define('my-memory-game',
             }))
             this.#retryButton.style.display = 'block'
             this.#attemptCounter.textContent = `Game Over! Total Attempts: ${this.#attempts}`
+            this.#gameTimer.stopTimer()
             this.#init()
           } else {
             tilesToEnable?.forEach(tile => (tile.removeAttribute('disabled')))
