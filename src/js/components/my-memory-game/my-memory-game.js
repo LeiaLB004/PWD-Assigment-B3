@@ -356,6 +356,7 @@ customElements.define('my-memory-game',
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
             eventName = 'memory-game:tiles-match'
+            first.focus()
           } else {
             first.removeAttribute('face-up')
             second.removeAttribute('face-up')
@@ -420,14 +421,15 @@ customElements.define('my-memory-game',
     }
 
     /**
-     * Vänd den fokuserade brickan.
+     * Flip the focused tile.
      */
     flipFocusedTile () {
       const focusedTile = this.shadowRoot.querySelector(':focus')
       console.log(focusedTile, focusedTile.tagName)
 
       if (focusedTile && focusedTile.tagName === 'MY-FLIPPING-TILE') {
-        focusedTile.click() // Simulera en klick händelse på den fokuserade brickan
+        focusedTile.click() // Simulate clicking.
+        focusedTile.focus()
       }
     }
 
