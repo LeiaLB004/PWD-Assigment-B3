@@ -56,12 +56,31 @@ customElements.define('my-weather-app',
             throw new Error('Weather data not found')
           }
           const data = await res.json()
-          console.log(data)
+          this.displayWeather(data)
         } catch (error) {
           console.error('Error fetching weather data:', error)
-          this.weatherInfo.textContent = 'Failed to fetch weather data. Please try again.'
+          this.#weatherInfo.textContent = 'Not a valid city'
         }
+      } else {
+        this.#weatherInfo.textContent = 'Please enter a city name.'
       }
+    }
+
+    /**
+     * Displays weather information in the component.
+     *
+     * @param {Object} data - Weather data object received from the API.
+     */
+    displayWeather (data) {
+      const { name, main, weather } = data
+      const temperature = main.temp
+      const description = weather[0].description
+
+      this.#weatherInfo.innerHTML = `
+      <h3>Weather in ${name}</h3>
+        <p><strong>Temperature:</strong> ${temperature} °C</p>
+        <p><strong>Description:</strong> ${description}</p>
+      `
     }
   }
 )
