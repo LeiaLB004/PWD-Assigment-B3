@@ -22,6 +22,11 @@ template.innerHTML = `
     overflow: hidden;
   }
 
+  my-desktop-dock {
+    display: flex;
+    justify-content: center;
+  }
+
 </style>
 <div id="desktop-body">
 <my-desktop-dock></my-desktop-dock>

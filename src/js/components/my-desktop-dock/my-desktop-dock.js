@@ -14,11 +14,11 @@ template.innerHTML = `
     display: block;
     position: fixed;
     background-color: #6e5483;
-    width: 100%;
-    height: 80px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 99%;
+    height: 70px;
+    box-shadow: rgba(0, 0, 0, 0.40) 0px 4px 8px;
     color: white;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px 30px 30px;
   }
 
   my-icon-button {

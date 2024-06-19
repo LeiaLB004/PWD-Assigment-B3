@@ -23,6 +23,7 @@ template.innerHTML = `
   }
 
   .window-header {
+    border-radius: 10px 10px 0 0;
     background-color: #6e5483;
     color: white;
     padding: 10px;
