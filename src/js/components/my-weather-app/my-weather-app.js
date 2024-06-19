@@ -125,6 +125,7 @@ customElements.define('my-weather-app',
      */
     async getWeather () {
       const cityName = this.#cityInput.value
+      this.#weatherInfo.style.display = 'block'
       if (cityName) {
         const apiKey = import.meta.env.VITE_WEATHER_APP_API_KEY
         const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`
@@ -134,7 +135,6 @@ customElements.define('my-weather-app',
           if (!res.ok) {
             throw new Error('Weather data not found')
           }
-          this.#weatherInfo.style.display = 'block'
           const data = await res.json()
           this.displayWeather(data)
         } catch (error) {
