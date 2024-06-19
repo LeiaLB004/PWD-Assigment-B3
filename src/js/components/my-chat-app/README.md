@@ -1,14 +1,14 @@
 # &lt;my-chat-app&gt;
 
-A web component for a simple chat application with WebSocket integration and emoji support.
+The web component represents a chat application with integrated emoji support, built using a custom element and a websocket connection to handle real-time messages. Below is a detailed description of the component along with the full implementation code:
 
 ## Attributes
 
-None
+No custom attributes are required or used for this component.
 
 ## Events
 
-None
+No custom events are fired by this component.
 
 ## Example
 
@@ -16,5 +16,3 @@ None
 <my-chat-app></my-chat-app>
 
 ```
-
-![Example](./.readme/example.gif)

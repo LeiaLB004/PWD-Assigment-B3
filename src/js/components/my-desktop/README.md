@@ -1,22 +1,19 @@
 # &lt;my-desktop&gt;
 
-A custom web component representing a desktop interface with various applications.
+A web component that represents a desktop environment with a dock for launching different applications.
 
 ## Attributes
 
-None
+No custom attributes are required or used for this component.
 
 ## Events
 
 | Event Name      | Fired When                        |
 | --------------- | --------------------------------- |
-| `desktop:clicked-icon`    | Clicked an icon       |
+| `desktop:open-app`    | Clicked an icon to open an app.       |
 
 ## Example
 
 ```html
 <my-desktop></my-desktop>
-
 ```
-
-![Example](./.readme/example.gif)

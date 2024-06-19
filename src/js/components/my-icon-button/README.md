@@ -4,15 +4,21 @@ A custom web component representing an icon button with customizable icon, hover
 
 ## Attributes
 
-### src
+### `src`
  Specifies the path to the icon image.
-### alt
+
+### `alt`
 Alternative text for the icon image.
 app-type: Represents the type of application or action associated with the icon.
 
+### `app-type`
+Specifies the type of application the icon represents. This value is dispatched with the icon-click event.
+
 ## Events
-### icon-click
-Fires when the icon button is clicked.
+
+| Event Name      | Fired When                        |
+| --------------- | --------------------------------- |
+| `icon-button:icon-click`    | Fires when the icon button is clicked.        |
 
 ## Example
 
