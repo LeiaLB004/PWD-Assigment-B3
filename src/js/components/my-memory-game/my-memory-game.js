@@ -180,8 +180,8 @@ customElements.define('my-memory-game',
       this.#attemptCounter = this.shadowRoot.querySelector('#attempt-counter')
       this.#retryButton = this.shadowRoot.querySelector('#retry-button')
       this.#gameTimer = this.shadowRoot.querySelector('my-game-timer')
-
       this.#boardSizeSelect = this.shadowRoot.querySelector('#board-size-select')
+
       this.#boardSizeSelect.addEventListener('click', (event) => {
         this.boardSize = event.target.value
         this.#gameTimer.resetTime()
@@ -288,36 +288,43 @@ customElements.define('my-memory-game',
 
       this.#upgradeProperty('boardsize')
 
+      // Set focus on the first tile
       const firstTile = this.#tiles.all[0]
       if (firstTile) {
         firstTile.setAttribute('tabindex', '0')
         firstTile.focus()
       }
 
+      // Listen after flipping of tile
       this.#gameBoard.addEventListener('my-flipping-tile:flip', () => {
+        // If the flipping is the first one of the game,
+        // start a timer and set firstClick to false
         if (this.#firstClick) {
           this.#gameTimer.startTimer()
           this.#firstClick = false
         }
         this.#onTileFlip()
       })
+
       this.addEventListener('dragstart', (event) => {
         // Disable element dragging.
         event.preventDefault()
         event.stopPropagation()
       })
 
+      // Listen for pressed keys
       this.addEventListener('keydown', (event) => {
         console.log('You pressed down', event.key)
+        // If key with arrow, move the focus for that key
         if (event.key.startsWith('Arrow')) {
           event.preventDefault()
-          this.moveFocus(event.key)
+          this.#moveFocus(event.key)
+        // If the pressed key is "Enter", flip the focused tile
         } else if (event.key === 'Enter') {
           event.preventDefault()
-          this.flipFocusedTile()
+          this.#flipFocusedTile()
         }
       })
-      this.#init()
     }
 
     /**
@@ -409,8 +416,12 @@ customElements.define('my-memory-game',
       const [first, second, ...tilesToEnable] = tilesToDisable
 
       if (second) {
+        // If two tiles are flipped, increase the number of attempts
         this.#attempts++ // Increment attempts counter
+        // Update the attempt counter
         this.#updateAttemptCounter()
+
+        // Compare the tiles to check if equal
         const isEqual = first.isEqual(second)
         const delay = isEqual ? 1000 : 1500
         window.setTimeout(() => {
@@ -419,6 +430,7 @@ customElements.define('my-memory-game',
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
             eventName = 'memory-game:tiles-match'
+            // Foucus back on the first chosen tile
             first.focus()
           } else {
             first.removeAttribute('face-up')
@@ -431,13 +443,17 @@ customElements.define('my-memory-game',
             detail: { first, second }
           }))
 
+          // Check if all tiles are hidden
+          // If so disable them all, end the game and show the results
           if (tiles.all.every(tile => tile.hidden)) {
             tiles.all.forEach(tile => (tile.disabled = true))
             this.dispatchEvent(new CustomEvent('memory-game:game-over', {
               bubbles: true
             }))
+
             this.#boardSizeSelect.style.display = 'none'
             this.#retryButton.style.display = 'block'
+
             this.#attemptCounter.textContent = `Game Over! Total Attempts: ${this.#attempts}`
             this.#gameTimer.stopTimer()
             this.#init()
@@ -453,7 +469,7 @@ customElements.define('my-memory-game',
      *
      * @param {string} key - The key names.
      */
-    moveFocus (key) {
+    #moveFocus (key) {
       const tiles = this.#tiles.all
       const focusedIndex = tiles.findIndex(tile => tile === this.shadowRoot.activeElement)
 
@@ -486,7 +502,7 @@ customElements.define('my-memory-game',
     /**
      * Flip the focused tile.
      */
-    flipFocusedTile () {
+    #flipFocusedTile () {
       const focusedTile = this.shadowRoot.querySelector(':focus')
       console.log(focusedTile, focusedTile.tagName)
 
