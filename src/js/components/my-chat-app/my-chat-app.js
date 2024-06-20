@@ -186,8 +186,11 @@ customElements.define('my-chat-app',
 
       this.websocket.addEventListener('message', (event) => {
         const message = JSON.parse(event.data)
+
         if (message.type === 'message') {
           this.displayMessage(message)
+        } else if (message.type === 'notification') {
+          this.displayMessage(message) // Ensure to display notifications correctly
         } else if (message.type === 'heartbeat') {
           // Ignore heartbeat messages
         }
