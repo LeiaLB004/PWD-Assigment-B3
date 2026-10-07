@@ -184,30 +184,57 @@ customElements.define('my-memory-game',
 
       this.#boardSizeSelect.addEventListener('click', (event) => {
         this.boardSize = event.target.value
-        this.#gameTimer.resetTime()
-        this.#attempts = 0
-        this.#updateAttemptCounter()
-        this.#firstClick = true
+        this.handleBoardSelect()
+      })
+      this.#boardSizeSelect.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault()
+          this.boardSize = event.target.value
+          this.#boardSizeSelect()
+        }
       })
 
       this.#retryButton.addEventListener('click', () => {
-        this.#firstClick = true
-        this.#boardSizeSelect.style.display = 'flex'
-        this.#retryButton.style.display = 'none'
-        // Reset attempts counter and update UI
-        this.#attempts = 0
-        this.#updateAttemptCounter()
-
-        this.#tiles.all.forEach((tile, i) => {
-          tile.removeAttribute('face-up')
-          tile.removeAttribute('hidden')
-          tile.removeAttribute('disabled')
-        })
-        this.#gameTimer.resetTime()
-        setTimeout(() => {
-          this.#init()
-        }, 500)
+        this.handleRetry()
       })
+      this.#retryButton.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault()
+          this.handleRetry()
+        }
+      })
+    }
+
+    /**
+     * Handle the functionality after clicking the retry button.
+     */
+    handleRetry () {
+      this.#firstClick = true
+      this.#boardSizeSelect.style.display = 'flex'
+      this.#retryButton.style.display = 'none'
+      // Reset attempts counter and update UI
+      this.#attempts = 0
+      this.#updateAttemptCounter()
+
+      this.#tiles.all.forEach((tile, i) => {
+        tile.removeAttribute('face-up')
+        tile.removeAttribute('hidden')
+        tile.removeAttribute('disabled')
+      })
+      this.#gameTimer.resetTime()
+      setTimeout(() => {
+        this.#init()
+      }, 500)
+    }
+
+    /**
+     * Handle board select buttons.
+     */
+    handleBoardSelect () {
+      this.#gameTimer.resetTime()
+      this.#attempts = 0
+      this.#updateAttemptCounter()
+      this.#firstClick = true
     }
 
     /**
@@ -311,7 +338,6 @@ customElements.define('my-memory-game',
         event.preventDefault()
         event.stopPropagation()
       })
-
       // Listen for pressed keys
       this.addEventListener('keydown', (event) => {
         console.log('You pressed down', event.key)

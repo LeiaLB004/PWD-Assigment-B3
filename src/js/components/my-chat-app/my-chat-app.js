@@ -96,10 +96,16 @@ button:hover {
     display: none;
     z-index: 1;
 }
+
+#username-display {
+  display: none;
+  margin-bottom: 5px;
+}
 </style>
 <div id="chat-container">
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Enter your username">
+  <button id="username-display"></button>
   <textarea id="message-input" placeholder="Type your message..."></textarea>
   <button id="send-button">Send</button>
   <button id="emoji-button">😀</button>
@@ -120,6 +126,7 @@ customElements.define('my-chat-app',
     #maxMessages = 20
     #emojiPicker
     #emojiButton
+    #usernameDisplay
     /**
      * Creates an instance of the current type.
      */
@@ -135,6 +142,7 @@ customElements.define('my-chat-app',
       this.#sendButton = this.shadowRoot.querySelector('#send-button')
       this.#emojiPicker = this.shadowRoot.querySelector('emoji-picker')
       this.#emojiButton = this.shadowRoot.querySelector('#emoji-button')
+      this.#usernameDisplay = this.shadowRoot.querySelector('#username-display')
 
       this.#sendButton.addEventListener('click', () => this.sendMessage())
       this.#messageInput.addEventListener('keydown', (event) => {
@@ -151,6 +159,8 @@ customElements.define('my-chat-app',
         this.#messageInput.value += emoji
       })
 
+      this.#usernameDisplay.addEventListener('click', () => this.changeUsername())
+
       this.connectWebSocket()
       this.loadUsername()
     }
@@ -161,17 +171,29 @@ customElements.define('my-chat-app',
     loadUsername () {
       const savedUsername = localStorage.getItem('username')
       if (savedUsername) {
-        this.#usernameInput.value = savedUsername
-        this.#usernameInput.setAttribute('readonly', true)
+        this.#usernameInput.style.display = 'none'
+        this.#usernameDisplay.style.display = 'block'
+        this.#usernameDisplay.textContent = savedUsername + ' (Click to change)'
       } else {
         this.#usernameInput.addEventListener('blur', () => {
           const username = this.#usernameInput.value.trim()
           if (username) {
+            this.#usernameInput.style.display = 'none'
+            this.#usernameDisplay.textContent = username + ' (Click to change)'
+            this.#usernameDisplay.style.display = 'block'
             localStorage.setItem('username', username)
-            this.#usernameInput.setAttribute('readonly', true)
           }
         })
       }
+    }
+
+    /**
+     * Change the username.
+     */
+    changeUsername () {
+      localStorage.removeItem('username')
+      this.#usernameDisplay.style.display = 'none'
+      this.#usernameInput.style.display = 'block'
     }
 
     /**
